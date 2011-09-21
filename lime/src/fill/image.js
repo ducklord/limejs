@@ -36,6 +36,9 @@ lime.fill.Image = function(img) {
         }
     }
     else {
+        if(!goog.isDef(img)){
+            throw 'Can not construct lime.fill.Image with undefined img';
+        }
         this.url_ = img.src;
         if(this.url_.length>50)
             this.url_ = this.url_.substr(-50);
