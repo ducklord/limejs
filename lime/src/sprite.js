@@ -120,7 +120,7 @@ lime.Renderer.DOM.SPRITE.draw = function(el) {
     if (goog.isDefAndNotNull(this.stroke_)) {
         this.stroke_.setDOMStyle(el, this);
     } else {
-        el.style.border='none';
+        el.style['border'] = '';
     }
 };
 
