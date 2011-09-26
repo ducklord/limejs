@@ -117,7 +117,7 @@ lime.Renderer.DOM.SPRITE.draw = function(el) {
     if (!goog.isNull(this.fill_)) {
         this.fill_.setDOMStyle(el, this);
     }
-    if (!goog.isNull(this.stroke_)) {
+    if (goog.isDefAndNotNull(this.stroke_)) {
         this.stroke_.setDOMStyle(el, this);
     } else {
         el.style.border='none';
