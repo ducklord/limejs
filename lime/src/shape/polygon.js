@@ -9,7 +9,7 @@ goog.require('lime.Sprite');
 
 /**
  * Polygon shaped textured object
- * @param {Array.<goog.math.Coodinate>} points Polygon points.
+ * @param {Array.<goog.math.Coordinate>} points Polygon points.
  * @constructor
  * @extends lime.Sprite
  */
@@ -41,7 +41,7 @@ lime.Polygon.prototype.getPoints = function() {
 
 /**
  * Sets points that define the polygon. Also accepts floats.
- * @param {Array.<goog.math.Coodinate>} points Polygon points.
+ * @param {Array.<goog.math.Coordinate>} points Polygon points.
  * @return {lime.Polygon} object itself.
  */
 lime.Polygon.prototype.setPoints = function(points) {
@@ -52,7 +52,7 @@ lime.Polygon.prototype.setPoints = function(points) {
 
 /**
  * Adds points to current polygon points. Also accepts floats.
- * @param {Array.<goog.math.Coodinate>} points Polygon points.
+ * @param {Array.<goog.math.Coordinate>} points Polygon points.
  * @return {lime.Polygon} object itself.
  */
 lime.Polygon.prototype.addPoints = function(points) {
