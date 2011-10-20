@@ -28,7 +28,7 @@ lime.Layer.prototype.hitTest = function(e) {
     //todo: this can be optimized
     for (var i = 0, child; child = this.children_[i]; i++) {
 
-            if (child.hitTest(e)) {
+            if (!child.getHidden() && child.hitTest(e)) {
                 e.position = this.screenToLocal(e.screenPosition);
                 return true;
             }

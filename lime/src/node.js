@@ -492,7 +492,7 @@ lime.Node.prototype.getRelativeQuality = function(){
         this.calcRelativeQuality();
         
     return this.relativeQuality_;
-}
+};
 
 /**
  * Calculates relative quality change from the
@@ -940,7 +940,7 @@ lime.Node.prototype.appendChild = function(child, opt_pos) {
  */
 lime.Node.prototype.getNumberOfChildren = function(){
     return this.children_.length;
-}
+};
 
 /**
  * Return the child at defined index.
@@ -1156,7 +1156,7 @@ lime.Node.prototype.setupDependencies = function(){
    if(this.inTree_){
        this.addDependency(this.getParent());
    }
-}
+};
 
 lime.Node.prototype.addDependency = function(other){
     if(!other.dependencies_) other.dependencies_ = [];
@@ -1166,19 +1166,19 @@ lime.Node.prototype.addDependency = function(other){
         this.addDependency(other.getParent());
     }
     
-}
+};
 
 lime.Node.prototype.removeDependency = function(other){
     if(!other || !other.dependencies_) return;
 
     goog.array.remove(other.dependencies_,this);
     this.removeDependency(other.getParent());
-}
+};
 
 lime.Node.prototype.releaseDependencies = function(){
     delete this.dependencySet_;
     this.removeDependency(this.getParent());
-}
+};
 
 /**
  * Returns bounding box for element is elements own coordinate space

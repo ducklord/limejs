@@ -64,7 +64,7 @@ lime.events.EventDispatcher.prototype.updateDispatchOrder = function(node){
             handlers.sort(lime.Node.compareNode);
         }
     }
-}
+};
 
 /**
  * Setup swallow rule for an event. Swallow means that next events from
@@ -145,12 +145,18 @@ lime.events.EventDispatcher.prototype.handleEvent = function(e) {
     else {
         for (var i = 0; i < handlers.length; i++) {
 
-            var handler = handlers[i];
+            var node = handler = handlers[i],
+                isHidden = false;
 
             if (this.director.getCurrentScene() != handler.getScene() &&
                 handler != this.director) continue;
 
-            if (handler.getHidden() || !handler.inTree_) continue;
+            while (node != null && !isHidden) {
+                isHidden = node.getHidden();
+                node = node.getParent();
+            };
+
+            if (isHidden || !handler.inTree_) continue;
 
             ee.targetObject = handler;
 
