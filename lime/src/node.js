@@ -1011,6 +1011,16 @@ lime.Node.prototype.removeAllChildren = function(){
 };
 
 /**
+ * Remove node from parent
+ */
+lime.Node.prototype.removeFromParent = function() {
+    
+    if (this.parent_ != null) {
+        this.parent_.removeChild(this);
+    }
+};
+
+/**
  * Move a child to another index in the childrens array.
  * @param {lime.Node} child Child node.
  * @param {number} index New index for the child.
@@ -1026,6 +1036,16 @@ lime.Node.prototype.setChildIndex = function(child,index){
         return this.setDirty(lime.Dirty.LAYOUT);
     }
     return this;
+};
+
+/**
+ * Move a child visually to the front
+ */
+lime.Node.prototype.moveToFront = function() {
+    
+    if (this.parent_ != null) {
+        this.parent_.setChildIndex(this, this.parent_.children_.length - 1);
+    }
 };
 
 /**
