@@ -105,7 +105,7 @@ lime.animation.Loop.prototype.handleActionEnd_ = function() {
  * @see lime.animation.Animation#addTarget
  */
 lime.animation.Loop.prototype.addTarget = function(target) {
-    this.action_.addTarget(target);
+    return this.action_.addTarget(target);
 };
 
 /**
@@ -113,5 +113,5 @@ lime.animation.Loop.prototype.addTarget = function(target) {
  * @see lime.animation.Animation#removeTarget
  */
 lime.animation.Loop.prototype.removeTarget = function(target) {
-    this.action_.removeTarget(target);
+    return this.action_.removeTarget(target);
 };
