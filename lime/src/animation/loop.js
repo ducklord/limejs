@@ -81,6 +81,13 @@ lime.animation.Loop.prototype.stop = function() {
 };
 
 /**
+ * Stop the looping animation when it is done with the current loop.
+ */
+lime.animation.Loop.prototype.stopLooping = function() {
+    this.playing_ = 0;
+};
+
+/**
  * Handle action end. Start new action or stop if limit reached.
  * @private
  */
