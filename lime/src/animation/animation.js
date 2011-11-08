@@ -133,13 +133,18 @@ lime.animation.Animation.prototype.play = function() {
  * Stop playing the animstion
  */
 lime.animation.Animation.prototype.stop = function() {
+    var i;
     if (this.status_ != 0) {
         var targets = this.initTargets_;
         if (this.useTransitions() && this.clearTransition) {
-            var i = targets.length;
+            i = targets.length;
             while (--i >= 0) {
                 this.clearTransition(targets[i]);
             }
+        }
+        i = targets.length;
+        while (--i >= 0) {
+            lime.animation.actionManager.unregister(this, targets[i]);
         }
         this.initTargets_ = [];
         this.targetProp_ = {};
@@ -308,14 +313,34 @@ lime.animation.actionManager.register = function(action, target) {
     //Todo: probably needs some garbage collection
     if (!action.scope.length) return;
     var id = goog.getUid(target);
+    if (goog.isDef(this.actions[id]) &&
+        goog.isDef(this.actions[id][action.scope])) {
+        this.actions[id][action.scope].stop();
+    }
     if (!goog.isDef(this.actions[id])) {
         this.actions[id] = {};
     }
-    if (goog.isDef(this.actions[id][action.scope])) {
-        this.actions[id][action.scope].stop();
-    }
     this.actions[id][action.scope] = action;
 };
+
+/**
+ * Unregister animation in the manager.
+ * @param {lime.animation.Animation} action Action.
+ * @param {lime.Node} target Taget node.
+ * @this {lime.animation.actionManager}
+ */
+lime.animation.actionManager.unregister = function(action, target) {
+    if (!action.scope.length) return;
+    var id = goog.getUid(target);
+    if(goog.isDef(this.actions[id]) &&
+       goog.isDef(this.actions[id][action.scope])){
+        delete this.actions[id][action.scope];
+        if(goog.object.isEmpty(this.actions[id])){
+            delete this.actions[id];
+        }
+    }
+};
+
 
 /**
  * Stop all animations on target.
