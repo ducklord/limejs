@@ -80,7 +80,7 @@ lime.transitions.SlideIn.prototype.start = function() {
 
     move.addTarget(this.incoming_);
 
-    goog.events.listen(move, lime.animation.Event.STOP,
+    goog.events.listenOnce(move, lime.animation.Event.STOP,
         this.finish, false, this);
 
     move.play();

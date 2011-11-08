@@ -21,7 +21,7 @@ lime.transitions.Dissolve.prototype.start = function() {
     this.incoming_.setHidden(false);
     var hide = new lime.animation.FadeTo(0).setDuration(this.getDuration()).enableOptimizations();
 
-    goog.events.listen(hide, lime.animation.Event.STOP, function() {
+    goog.events.listenOnce(hide, lime.animation.Event.STOP, function() {
         if (this.outgoing_) {
             this.outgoing_.setOpacity(1);
         }
@@ -33,7 +33,7 @@ lime.transitions.Dissolve.prototype.start = function() {
     var show = new lime.animation.FadeTo(1).setDuration(this.getDuration());
     this.incoming_.runAction(show);
 
-    goog.events.listen(show, lime.animation.Event.STOP,
+    goog.events.listenOnce(show, lime.animation.Event.STOP,
         this.finish, false, this);
 
 
