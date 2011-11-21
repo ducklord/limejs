@@ -769,7 +769,7 @@ lime.Node.prototype.update = function(opt_pass) {
             property = lime.Node.getPropertyForTransition(parseInt(i, 10));
             lime.style.clearTransition(this.domElement, property);
             if (this.domElement != this.containerElement) {
-                lime.style.clearTransition(this.continerElement, property);
+                lime.style.clearTransition(this.containerElement, property);
             }
         }
         
