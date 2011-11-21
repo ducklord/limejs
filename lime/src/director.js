@@ -93,7 +93,7 @@ lime.Director = function(parentElement, opt_width, opt_height) {
         
         
         //todo: look for a less hacky solution
-        if(goog.userAgent.MOBILE && !goog.global['navigator']['standalone']){
+        if(goog.userAgent.MOBILE && !goog.isDef(goog.global['navigator']['standalone'])){
             var that = this;
             setTimeout(
                 function(){window.scrollTo(0, 0); that.invalidateSize_();}
@@ -512,7 +512,7 @@ lime.Director.prototype.makeMobileWebAppCapable = function() {
     }
 
     var ios = (/(ipod|iphone|ipad)/i).test(navigator.userAgent);
-    if (ios && !goog.global['navigator']['standalone'] && COMPILED && !visited && this.domElement.parentNode==document.body) {
+    if (ios && !goog.isDef(goog.global['navigator']['standalone']) && COMPILED && !visited && this.domElement.parentNode==document.body) {
         alert('Please install this page as a web app by ' +
             'clicking Share + Add to home screen.');
         if (goog.isDef(localStorage)) {
