@@ -93,7 +93,7 @@ lime.Director = function(parentElement, opt_width, opt_height) {
         
         
         //todo: look for a less hacky solution
-        if(goog.userAgent.MOBILE && !goog.global['navigator'].standalone){
+        if(goog.userAgent.MOBILE && !goog.global['navigator']['standalone']){
             var that = this;
             setTimeout(
                 function(){window.scrollTo(0, 0);that.invalidateSize_()}
