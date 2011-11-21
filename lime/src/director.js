@@ -96,7 +96,7 @@ lime.Director = function(parentElement, opt_width, opt_height) {
         if(goog.userAgent.MOBILE && !goog.global['navigator']['standalone']){
             var that = this;
             setTimeout(
-                function(){window.scrollTo(0, 0);that.invalidateSize_()}
+                function(){window.scrollTo(0, 0); that.invalidateSize_();}
             ,100);
         }
     }
