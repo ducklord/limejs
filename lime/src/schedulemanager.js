@@ -270,13 +270,13 @@ lime.ScheduleManager.prototype.dispatch_ = function(delta){
     //hack to deal with FF4 CSS transformation issue https://bugzilla.mozilla.org/show_bug.cgi?id=637597
     if(lime.transformSet_ == 1 && (/Firefox\/4./).test(goog.userAgent.getUserAgentString()) &&
        !lime.FF4_USE_HW_ACCELERATION){
-        if(lime.scheduleManager.odd_){
+        if(this.odd_){
             document.body.style['MozTransform'] = '';
-            lime.scheduleManager.odd_=0;
+            this.odd_=0;
         }
         else {
             document.body.style['MozTransform'] = 'scale(1,1)';
-            lime.scheduleManager.odd_=1;
+            this.odd_=1;
         }
         lime.transformSet_=0;
     }
