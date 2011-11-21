@@ -299,17 +299,17 @@ lime.animation.Animation.prototype.reverse = function() {
  * run together on same targets.
  * @constructor
  */
-lime.animation.actionManager = new (function() {
+lime.animation.ActionManager = function() {
     this.actions = {};
-});
+};
 
 /**
  * Register animation in the manager.
  * @param {lime.animation.Animation} action Action.
  * @param {lime.Node} target Taget node.
- * @this {lime.animation.actionManager}
+ * @this {lime.animation.ActionManager}
  */
-lime.animation.actionManager.register = function(action, target) {
+lime.animation.ActionManager.prototype.register = function(action, target) {
     //Todo: probably needs some garbage collection
     if (!action.scope.length) return;
     var id = goog.getUid(target);
@@ -327,9 +327,9 @@ lime.animation.actionManager.register = function(action, target) {
  * Unregister animation in the manager.
  * @param {lime.animation.Animation} action Action.
  * @param {lime.Node} target Taget node.
- * @this {lime.animation.actionManager}
+ * @this {lime.animation.ActionManager}
  */
-lime.animation.actionManager.unregister = function(action, target) {
+lime.animation.ActionManager.prototype.unregister = function(action, target) {
     if (!action.scope.length) return;
     var id = goog.getUid(target);
     if(goog.isDef(this.actions[id]) &&
@@ -345,9 +345,9 @@ lime.animation.actionManager.unregister = function(action, target) {
 /**
  * Stop all animations on target.
  * @param {lime.Node} target Target node.
- * @this {lime.animation.actionManager}
+ * @this {lime.animation.ActionManager}
  */
-lime.animation.actionManager.stopAll = function(target) {
+lime.animation.ActionManager.prototype.stopAll = function(target) {
     // todo: doesn't stop scopless action atm. (like sequence)
     var id = goog.getUid(target);
     if (goog.isDef(this.actions[id])) {
@@ -358,6 +358,7 @@ lime.animation.actionManager.stopAll = function(target) {
     }
 };
 
+lime.animation.actionManager = new lime.animation.ActionManager();
 
 (function(){
     
