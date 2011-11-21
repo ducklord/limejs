@@ -169,15 +169,18 @@ lime.events.Drag.prototype.moveHandler_ = function(e) {
 
    if (sel != this.dropIndex_) {
         if (this.dropIndex_ != -1) {
-            if (goog.isFunction(this.dropTargets_[this.dropIndex_].hideDropHightLight)) {
-                this.dropTargets_[this.dropIndex_].hideDropHightLight();
+            var target = this.dropTargets_[this.dropIndex_];
+            if (goog.isDef(target.hideDropHightLight) &&
+                goog.isFunction(target.hideDropHightLight)) {
+                target.hideDropHightLight();
             }
         }
         this.dropIndex_ = sel;
         if (this.dropIndex_ != -1) {
-            if (goog.isFunction(
-                this.dropTargets_[this.dropIndex_].showDropHightLight)) {
-                this.dropTargets_[this.dropIndex_].showDropHightLight();
+            target = this.dropTargets_[this.dropIndex_];
+            if (goog.isDef(target.showDropHightLight) &&
+                goog.isFunction(target.showDropHightLight)) {
+                target.showDropHightLight();
             }
         }
 
@@ -202,7 +205,8 @@ lime.events.Drag.prototype.releaseHandler_ = function(e) {
     if (this.dropIndex_ != -1) {
         var ev = new goog.events.Event(lime.events.Drag.Event.DROP);
         ev.activeDropTarget = this.dropTargets_[this.dropIndex_];
-        if (goog.isFunction(ev.activeDropTarget.showDropHightLight)) {
+        if (goog.isDef(ev.activeDropTarget.hideDropHightLight) &&
+            goog.isFunction(ev.activeDropTarget.hideDropHightLight)) {
             ev.activeDropTarget.hideDropHightLight();
         }
         this.dispatchEvent(ev);
