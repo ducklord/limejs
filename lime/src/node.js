@@ -1014,9 +1014,9 @@ lime.Node.prototype.removeAllChildren = function(){
  * Remove node from parent
  */
 lime.Node.prototype.removeFromParent = function() {
-    
-    if (this.parent_ != null) {
-        this.parent_.removeChild(this);
+    var parent = this.getParent();
+    if (!goog.isNull(parent)) {
+        parent.removeChild(this);
     }
 };
 
@@ -1042,9 +1042,9 @@ lime.Node.prototype.setChildIndex = function(child,index){
  * Move a child visually to the front
  */
 lime.Node.prototype.moveToFront = function() {
-    
-    if (this.parent_ != null) {
-        this.parent_.setChildIndex(this, this.parent_.children_.length - 1);
+    var parent = this.getParent();
+    if (!goog.isNull(parent)) {
+        parent.setChildIndex(this, parent.children_.length - 1);
     }
 };
 
