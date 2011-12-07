@@ -260,8 +260,8 @@ lime.fill.Text.prototype.setCanvasStyle = function(context, shape) {
 
     context.fillStyle = this.getFontColor();
     context.font = this.getFontWeight() + ' ' + this.getFontSize() +
-        'px/' + this.getFontSize() + ' ' + this.getFontFamily();
-    context.textBaseline = 'top';
+        'px' + ' ' + this.getFontFamily();
+    context.textBaseline = 'middle';
     
     if(this.hasShadow_()){
         context.shadowColor = this.getShadowColor();
@@ -270,6 +270,6 @@ lime.fill.Text.prototype.setCanvasStyle = function(context, shape) {
         context.shadowBlur = this.getShadowBlur();
     }
     
-    context.fillText(this.text_, -size.width / 2, -size.height / 2);
+    context.fillText(this.text_, -size.width / 2, 0);
     context.restore();
 };
