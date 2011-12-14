@@ -45,8 +45,8 @@ lime.transitions.Transition.prototype.setDuration = function(value) {
  * @return {lime.transitions.Transition} object itself.
  */
 lime.transitions.Transition.prototype.setFinishCallback = function(value) {
-    if(goog.DEBUG && console && console.warn){
-        console.warn('Transition.prototype.setFinishCallback() is deprecated. Use event listeners.');
+    if(goog.DEBUG && goog.global['console'] && goog.global['console']['warn']){
+        goog.global['console']['warn']('Transition.prototype.setFinishCallback() is deprecated. Use event listeners.');
     }
     return this;
 };
