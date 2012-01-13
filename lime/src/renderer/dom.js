@@ -101,7 +101,7 @@ lime.Renderer.DOM.drawSizePosition = function() {
         }
     }
 
-    var transform = new lime.style.Transform().setPrecision(.1);
+    var transform = new lime.style.Transform().setPrecision(1);
 
     if (this.mask_) {
       lime.Renderer.DOM.calculateMaskPosition.call(this.mask_);
