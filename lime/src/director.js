@@ -471,10 +471,10 @@ lime.Director.prototype.invalidateSize_ = function() {
     this.setScale(scale);
 
     if (stageSize.aspectRatio() < realSize.aspectRatio()) {
-        this.setPosition(0, (stageSize.height - realSize.height) / 2);
+        this.setPosition(0, Math.round((stageSize.height - realSize.height) / 2));
     }
     else {
-        this.setPosition((stageSize.width - realSize.width) / 2, 0);
+        this.setPosition(Math.round((stageSize.width - realSize.width) / 2), 0);
     }
 
     this.updateDomOffset_();
@@ -546,7 +546,7 @@ lime.Director.prototype.keyUpHandler_ = function(e){
        e.stopPropagation();
        e.preventDefault();
    }
-}
+};
 
 /**
  * @inheritDoc
