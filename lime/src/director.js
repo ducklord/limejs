@@ -114,11 +114,9 @@ lime.Director = function(parentElement, opt_width, opt_height) {
 
 
     var vsm = new goog.dom.ViewportSizeMonitor();
-    goog.events.listen(vsm, goog.events.EventType.RESIZE,
-        this.invalidateSize_, false, this);
-    goog.events.listen(goog.global, 'orientationchange',
-        this.invalidateSize_, false, this);
-
+    goog.events.listen(vsm, goog.events.EventType.RESIZE, this.invalidateSize_, false, this);
+    goog.events.listen(goog.global, 'orientationchange', this.invalidateSize_, false, this);
+    this.autoScale = true;
 
     lime.scheduleManager.schedule(this.step_, this);
 
@@ -465,10 +463,12 @@ lime.Director.prototype.invalidateSize_ = function() {
         }
     }
 
-    var realSize = this.getSize().clone().scaleToFit(stageSize);
 
-    var scale = realSize.width / this.getSize().width;
-    this.setScale(scale);
+    if (this.autoScale) {
+        var realSize = this.getSize().clone().scaleToFit(stageSize);
+        var scale = realSize.width / this.getSize().width;
+        this.setScale(scale);
+    }
 
     if (stageSize.aspectRatio() < realSize.aspectRatio()) {
         this.setPosition(0, Math.round((stageSize.height - realSize.height) / 2));
