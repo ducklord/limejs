@@ -454,7 +454,9 @@ lime.Director.prototype.update = function() {
  */
 lime.Director.prototype.invalidateSize_ = function() {
 
-    var stageSize = goog.style.getSize(this.domElement.parentNode);
+    var stageSize = goog.style.getSize(this.domElement.parentNode),
+        size = this.getSize(),
+        realSize = size.clone().scaleToFit(stageSize);
 
     if (this.domElement.parentNode == document.body) {
         window.scrollTo(0, 0);
@@ -463,11 +465,8 @@ lime.Director.prototype.invalidateSize_ = function() {
         }
     }
 
-
     if (this.autoScale) {
-        var realSize = this.getSize().clone().scaleToFit(stageSize);
-        var scale = realSize.width / this.getSize().width;
-        this.setScale(scale);
+        this.setScale(realSize.width / size.width);
     }
 
     if (stageSize.aspectRatio() < realSize.aspectRatio()) {
