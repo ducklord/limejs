@@ -116,7 +116,7 @@ lime.Director = function(parentElement, opt_width, opt_height) {
     var vsm = new goog.dom.ViewportSizeMonitor();
     goog.events.listen(vsm, goog.events.EventType.RESIZE, this.invalidateSize_, false, this);
     goog.events.listen(goog.global, 'orientationchange', this.invalidateSize_, false, this);
-    this.autoScale = true;
+    this.keepAspect = true;
 
     lime.scheduleManager.schedule(this.step_, this);
 
@@ -455,8 +455,8 @@ lime.Director.prototype.update = function() {
 lime.Director.prototype.invalidateSize_ = function() {
 
     var stageSize = goog.style.getSize(this.domElement.parentNode),
-        size = this.getSize(),
-        realSize = size.clone().scaleToFit(stageSize);
+        size,
+        realSize;
 
     if (this.domElement.parentNode == document.body) {
         window.scrollTo(0, 0);
@@ -465,15 +465,18 @@ lime.Director.prototype.invalidateSize_ = function() {
         }
     }
 
-    if (this.autoScale) {
-        this.setScale(realSize.width / size.width);
-    }
+    if (this.keepAspect) {
+        size = this.getSize();
+        realSize = size.clone().scaleToFit(stageSize);
 
-    if (stageSize.aspectRatio() < realSize.aspectRatio()) {
-        this.setPosition(0, Math.round((stageSize.height - realSize.height) / 2));
-    }
-    else {
-        this.setPosition(Math.round((stageSize.width - realSize.width) / 2), 0);
+        this.setScale(realSize.width / size.width);
+
+        if (stageSize.aspectRatio() < realSize.aspectRatio()) {
+            this.setPosition(0, Math.round((stageSize.height - realSize.height) / 2));
+        }
+        else {
+            this.setPosition(Math.round((stageSize.width - realSize.width) / 2), 0);
+        }
     }
 
     this.updateDomOffset_();
