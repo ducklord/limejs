@@ -209,6 +209,11 @@ lime.fill.Image.prototype.setDOMBackgroundProp_ = function(domEl,shape){
 }
 
 /** @inheritDoc */
+lime.fill.Image.prototype.clearDOMStyle = function(domEl, shape) {
+    
+};
+
+/** @inheritDoc */
 lime.fill.Image.prototype.setDOMStyle = function(domEl,shape) {
     domEl.style['background'] = 'url(' + this.image_.src + ')';
     this.setDOMBackgroundProp_(domEl,shape);

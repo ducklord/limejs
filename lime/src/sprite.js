@@ -28,6 +28,12 @@ lime.Sprite = function() {
      */
     this.fill_ = null;
 
+    /**
+     * Last fill object used to draw.
+     * @type {lime.fill.Fill}
+     * @private
+     */
+    this.lastFill_ = null;
 
     this.stroke_ = null;
 
@@ -65,6 +71,7 @@ lime.Sprite.prototype.getFill = function() {
  * @return {lime.Sprite} object itself.
  */
 lime.Sprite.prototype.setFill = function(fill, opt_g, opt_b, opt_a) {
+    this.lastFill_ = this.getFill();
     this.fill_ = lime.fill.parse(goog.array.toArray(arguments));
     this.fill_.initForSprite(this);
     this.setDirty(lime.Dirty.CONTENT);
@@ -114,6 +121,13 @@ lime.Sprite.prototype.getCanvasContextName_ = (function() {
  * @this {lime.Sprite}
  */
 lime.Renderer.DOM.SPRITE.draw = function(el) {
+    // Clear last fill css properties.
+    if(!goog.isNull(this.lastFill_)) {
+        this.lastFill_.clearDOMStyle(el, this);
+        this.lastFill_ = null;
+    }
+    
+    // Set new fill css properties.
     if (!goog.isNull(this.fill_)) {
         this.fill_.setDOMStyle(el, this);
     }

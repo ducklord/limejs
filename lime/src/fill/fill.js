@@ -44,6 +44,13 @@ lime.fill.parse = function(inp) {
 };
 
 /**
+ * Clear DOM style for dom element.
+ * @param {Element} domEl DOM Element.
+ * @param {lime.Node=} shape The shape to draw in.
+ */
+lime.fill.Fill.prototype.clearDOMStyle = goog.nullFunction;
+
+/**
  * Set color as a DOM style for dom element.
  * @param {Element} domEl DOM Element.
  * @param {lime.Node=} shape The shape to draw in.

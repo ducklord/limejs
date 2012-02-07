@@ -74,6 +74,11 @@ lime.fill.LinearGradient.prototype.formatColorStop_ = function(clr) {
 };
 
 /** @inheritDoc */
+lime.fill.LinearGradient.prototype.clearDOMStyle = function(domEl, shape) {
+    
+};
+
+/** @inheritDoc */
 lime.fill.LinearGradient.prototype.setDOMStyle = function(domEl, shape) {
      var grad, frame = shape.getFrame(),
      width = frame.right - frame.left,

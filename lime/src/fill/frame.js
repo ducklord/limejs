@@ -209,6 +209,12 @@ lime.fill.Frame.prototype.writeToCanvas = function(ctx){
 };
 
 /** @inheritDoc */
+lime.fill.Frame.prototype.clearDOMStyle = function(domEl, shape) {
+    goog.dom.classes.remove(domEl, shape.cvs_background_class_);
+    delete shape.cvs_background_class_;
+};
+
+/** @inheritDoc */
 lime.fill.Frame.prototype.setDOMStyle = function(domEl,shape) {
     if(this.USE_CSS_CANVAS){
         domEl.style['background'] = '-webkit-canvas('+this.data_.classname+')';    
@@ -216,8 +222,9 @@ lime.fill.Frame.prototype.setDOMStyle = function(domEl,shape) {
     else if(this.data_.classname!=shape.cvs_background_class_){
         goog.dom.classes.add(domEl,this.data_.classname);
         domEl.style['background'] = '';
-        if(shape.cvs_background_class_)
-        goog.dom.classes.remove(domEl,shape.cvs_background_class_);
+        if(shape.cvs_background_class_) {
+            goog.dom.classes.remove(domEl,shape.cvs_background_class_);
+        }
         shape.cvs_background_class_ = this.data_.classname;
     }
     
