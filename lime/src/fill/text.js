@@ -249,6 +249,11 @@ lime.fill.Text.prototype.initForSprite = function(sprite) {
 };
 
 /** @inheritDoc */
+lime.fill.Text.prototype.clearDOMStyle = function(domEl, shape) {
+    throw 'Not implemented';
+};
+
+/** @inheritDoc */
 lime.fill.Text.prototype.setDOMStyle = function(domEl, shape) {
     throw 'Not implemented';
 };

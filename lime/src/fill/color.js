@@ -122,6 +122,11 @@ lime.fill.Color.prototype.setColor = function(clr) {
 };
 
 /** @inheritDoc */
+lime.fill.Color.prototype.clearDOMStyle = function(domEl, shape) {
+    
+};
+
+/** @inheritDoc */
 lime.fill.Color.prototype.setDOMStyle = function(domEl) {
     domEl.style['background'] = this.str;
 };
