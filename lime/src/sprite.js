@@ -124,6 +124,7 @@ lime.Renderer.DOM.SPRITE.draw = function(el) {
     // Clear last fill css properties.
     if(!goog.isNull(this.lastFill_)) {
         this.lastFill_.clearDOMStyle(el, this);
+        this.lastFill_ = null;
     }
     
     // Set new fill css properties.
