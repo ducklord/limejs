@@ -38,9 +38,8 @@ lime.Renderer.CANVAS.drawCanvas = function() {
         sizediff < 1.6 && sizediff > 0.5) {
         //use the cached canvas size
         bounds = this.boundsCache;
-    }
-    else {
-        if (this.staticCanvas != 1 && this.children_.length != 0) {
+    } else {
+        if (this.children_.length != 0) {
            if(!(this instanceof lime.Scene)){
                bounds.expand(PADDING, PADDING, PADDING, PADDING);
            }
