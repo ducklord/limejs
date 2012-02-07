@@ -210,7 +210,7 @@ lime.fill.Frame.prototype.writeToCanvas = function(ctx){
 
 /** @inheritDoc */
 lime.fill.Frame.prototype.clearDOMStyle = function(domEl, shape) {
-    goog.dom.classes.remove(domEl, this.data_.classname);
+    goog.dom.classes.remove(domEl, shape.cvs_background_class_);
     delete shape.cvs_background_class_;
 };
 
