@@ -12,28 +12,39 @@ goog.require('lime.style');
  */
 lime.Renderer.DOM = new lime.Renderer();
 
+lime.Renderer.DOM.logger = jst.logging.Logger.getLogger('lime.Renderer.DOM');
+
 /**
  * Update the DOM tree relations of the element.
  * @this {lime.Node}
  */
 lime.Renderer.DOM.updateLayout = function() {
     var j = 0, el;
-    for (var i = 0, child; child = this.children_[i]; i++) {
-        el = child instanceof lime.Node ? child.rootElement : child;
-
-        if (el == this.domElement.childNodes[j]) {
-            j++;
-            continue;
-        }
-        else {
-            if (goog.dom.contains(this.containerElement, el)) {
-                goog.dom.removeNode(el);
+    
+    try {
+        
+        for (var i = 0, child; child = this.children_[i]; i++) {
+            el = child instanceof lime.Node ? child.rootElement : child;
+    
+            if (el == this.domElement.childNodes[j]) {
+                j++;
+                continue;
+            } else {
+                if (goog.dom.contains(this.containerElement, el)) {
+                    goog.dom.removeNode(el);
+                }
+                lime.Renderer.DOM.appendAt_(this.containerElement, el, j++);
+                continue;
             }
-            lime.Renderer.DOM.appendAt_(this.containerElement, el, j++);
-            continue;
         }
-    }
 
+    }catch(e) {
+        lime.Renderer.DOM.logger.error('Childnodes of undefined or null', {
+            'event': e,
+            'thisdomElement': this.domElement,
+            'element': el
+        });
+    }
    /* var lastIndex = this.containerElement.childNodes.length - 1;
     while (lastIndex >= j) {
         goog.dom.removeNode(this.containerElement.childNodes[lastIndex]);
