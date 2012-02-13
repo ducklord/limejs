@@ -6,12 +6,14 @@ goog.require('goog.math.Vec2');
 goog.require('goog.math.Size');
 goog.require('goog.json');
 
-
+goog.require('jst.logging.Logger');
 
 /**
  * @const
  */
 lime.parser.ZWOPTEX2 = (function(){
+    var logger = jst.logging.Logger.getLogger('lime.parser.ZWOPTEX2');
+    
     function makeDict(element){
         var ob = {};
         var keys = findNodes(element,'key');
@@ -33,16 +35,23 @@ lime.parser.ZWOPTEX2 = (function(){
 
     return function(data){
         var dict = {},
-            doc = goog.dom.xml.loadXml(data),
-        
-            root = findNodes(findNodes(doc,'plist')[1],'dict')[0],
-
-            d0 = makeDict(root),
-            d1 = makeDict(d0['frames']),
+            doc,
+            root,
+            d0,
+            d1,
             parse = function(v){
                 return goog.json.parse(this[v].firstChild.nodeValue.replace(/\{/g,'[').replace(/\}/g,']'));
             };
 
+        try {
+            doc = goog.dom.xml.loadXml(data);
+            root = findNodes(findNodes(doc,'plist')[1],'dict')[0];
+            d0 = makeDict(root);
+            d1 = makeDict(d0['frames']);
+        }catch(e) {
+            logger.error('Error in meta data', data, doc);
+        }
+            
         for(var i in d1){
             var d2 = makeDict(d1[i]);
             d2.getValue = parse;
