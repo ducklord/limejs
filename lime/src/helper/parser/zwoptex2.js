@@ -49,7 +49,7 @@ lime.parser.ZWOPTEX2 = (function(){
             d0 = makeDict(root);
             d1 = makeDict(d0['frames']);
         }catch(e) {
-            logger.error('Error in meta data', data, doc);
+            logger.error('Error in meta data', {'data': data, 'doc': doc});
         }
             
         for(var i in d1){
