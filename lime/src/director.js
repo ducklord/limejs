@@ -25,10 +25,11 @@ goog.require('lime.transitions.Transition');
  * @param {Element} parentElement Parent element for director.
  * @param {number=} opt_width Optionaly define what height and width the director should have.
  * @param {number=} opt_height Optionaly define what height and width the director should have.
+ * @param {boolean=} opt_keepAspect Optionaly defined that the director should or should not keep aspect ratio.
  * @constructor
  * @extends lime.Node
  */
-lime.Director = function(parentElement, opt_width, opt_height) {
+lime.Director = function(parentElement, opt_width, opt_height, opt_keepAspect) {
     lime.Node.call(this);
 
     // Unlike other nodes Director is always in the DOM as
@@ -116,7 +117,7 @@ lime.Director = function(parentElement, opt_width, opt_height) {
     var vsm = new goog.dom.ViewportSizeMonitor();
     goog.events.listen(vsm, goog.events.EventType.RESIZE, this.invalidateSize_, false, this);
     goog.events.listen(goog.global, 'orientationchange', this.invalidateSize_, false, this);
-    this.keepAspect = true;
+    this.keepAspect = goog.isDef(opt_keepAspect) ? opt_keepAspect : true;
 
     lime.scheduleManager.schedule(this.step_, this);
 
