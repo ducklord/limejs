@@ -174,19 +174,10 @@ lime.ScheduleManager.prototype.activate_ = function() {
     
     this.lastRunTime_ = goog.now();
     
-    if(lime.scheduleManager.USE_ANIMATION_FRAME){
-        // mozilla
-        if(goog.global['mozRequestAnimationFrame']){
-            goog.global['mozRequestAnimationFrame']();
-            this.beforePaintHandlerBinded_ = goog.bind(this.beforePaintHandler_,this);
-            goog.global.addEventListener('MozBeforePaint',this.beforePaintHandlerBinded_, false);
-        }
-        else { // webkit
-            this.animationFrameHandlerBinded_ = goog.bind(this.animationFrameHandler_,this);
-            goog.global['webkitRequestAnimationFrame'](this.animationFrameHandlerBinded_);
-        }
-    }
-    else {
+    if(goog.isDef(lime.scheduleManager.requestAnimationFrameFunction)){
+        this.animationFrameHandlerBinded_ = goog.bind(this.animationFrameHandler_,this);
+        this.animationFrameRequestID_ = lime.scheduleManager.requestAnimationFrameFunction(this.animationFrameHandlerBinded_);
+    } else {
         this.intervalID_ = setInterval(goog.bind(this.stepTimer_, this), this.getDisplayRate());
     }
     this.active_ = true;
@@ -202,16 +193,9 @@ lime.ScheduleManager.prototype.activate_ = function() {
 lime.ScheduleManager.prototype.disable_ = function() {
     if (!this.active_) return;
     
-    if(lime.scheduleManager.USE_ANIMATION_FRAME){
-        // mozilla
-        if(goog.global['mozRequestAnimationFrame']){
-            goog.global.removeEventListener('MozBeforePaint',this.beforePaintHandlerBinded_, false);
-        }
-        else { //webkit
-            goog.global['webkitCancelRequestAnimationFrame'](this.animationFrameHandlerBinded_);
-        }
-    }
-    else {
+    if(goog.isDef(lime.scheduleManager.cancelRequestAnimationFrameFunction)){
+        lime.scheduleManager.cancelRequestAnimationFrameFunction(this.animationFrameRequestID_);
+    } else {
         clearInterval(this.intervalID_);
     }
     this.active_ = false;
@@ -227,20 +211,8 @@ lime.ScheduleManager.prototype.animationFrameHandler_ = function(time){
     var delta = time - this.lastRunTime_;
     this.dispatch_(delta);
     this.lastRunTime_ = time;
-    goog.global['webkitRequestAnimationFrame'](this.animationFrameHandlerBinded_);
-}
-
-/**
- * Mozilla implemtation of requestAnimationFrame handler.
- * @this {lime.ScheduleManager}
- * @private
- */
-lime.ScheduleManager.prototype.beforePaintHandler_ = function(event){
-    var delta = event.timeStamp - this.lastRunTime_;
-    this.dispatch_(delta);
-    this.lastRunTime_ = event.timeStamp;
-    goog.global['mozRequestAnimationFrame']();
-}
+    this.animationFrameRequestID = lime.scheduleManager.requestAnimationFrameFunction(this.animationFrameHandlerBinded_);
+};
 
 /**
  * Timer events step function that delegates to other objects waiting
@@ -336,10 +308,27 @@ lime.scheduleManager = new lime.ScheduleManager();
 lime.scheduleManager.taskStack_.push(new lime.ScheduleManager.Task(0));
 
 /**
- * Whether to use requestAnimationFrame instead of timer events
- * Exposed here so it could be disabled if needed.
- * @type {boolean}
+ * The request animation frame function avaliable.
+ * @type {function(function(number))}
  */
-lime.scheduleManager.USE_ANIMATION_FRAME = goog.global['mozRequestAnimationFrame'] ||
-    goog.global['webkitRequestAnimationFrame'];
+lime.scheduleManager.requestAnimationFrameFunction = (function() {
+    var requestFunction = goog.global['requestAnimationFrame'] ||
+            goog.global['webkitRequestAnimationFrame'] ||
+            goog.global['mozRequestAnimationFrame'] ||
+            goog.global['oRequestAnimationFrame'] ||
+            goog.global['msRequestAnimationFrame'];
+    return requestFunction ? goog.bind(requestFunction, goog.global) : undefined;
+})();
 
+/**
+ * The cancel request animation fram function avaliable.
+ * @type {function(number)}
+ */
+lime.scheduleManager.cancelRequestAnimationFrameFunction = (function() {
+    var cancelFunction = goog.global['cancelAnimationFrame'] ||
+            goog.global['webkitCancelRequestAnimationFrame'] ||
+            goog.global['mozCancelRequestAnimationFrame'] ||
+            goog.global['oCancelRequestAnimationFrame'] ||
+            goog.global['msCancelRequestAnimationFrame'];
+    return cancelFunction ? goog.bind(cancelFunction, goog.global) : undefined;
+})();
