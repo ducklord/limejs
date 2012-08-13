@@ -112,17 +112,29 @@ lime.style.Transform.prototype.rotate = function(angle, opt_unit) {
  * @param {number=} opt_tz Offset in z-axis.
  * @return {lime.style.Transform} object itself.
  */
-lime.style.Transform.prototype.translate = function(tx, ty, opt_tz) {
+lime.style.Transform.prototype.translate = (function() {
+    if (lime.userAgent.IOS || lime.userAgent.PLAYBOOK) {
+        return function(tx, ty, opt_tz) {
+            var p = 1 / this.precision,
+                val = 'translate3d(';
 
-    var p = 1 / this.precision;
-    var val = 'translate';
-    if (lime.userAgent.IOS || lime.userAgent.PLAYBOOK) val += '3d';
-    val += '(' + (tx * p) + 'px,' + (ty * p) + 'px';
-    if (lime.userAgent.IOS || lime.userAgent.PLAYBOOK) val += ',' + ((opt_tz ? opt_tz : 0) * p) + 'px';
-    this.values.push(val + ')');
-    
-    return this;
-};
+            val += (tx * p) + 'px,' + (ty * p) + 'px,' + ((opt_tz ? opt_tz : 0) * p) + 'px)';
+
+            this.values.push(val);
+            return this;
+        };
+    } else {
+        return function(tx, ty, opt_tz) {
+            var p = 1 / this.precision,
+                val = 'translate(';
+
+            val += Math.round(tx * p) + 'px,' + Math.round(ty * p) + 'px)';
+
+            this.values.push(val);
+            return this;
+        };
+    }
+})();
 
 /**
  * Set the current precision of transform. This is handled as a
