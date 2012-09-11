@@ -207,8 +207,15 @@ lime.ScheduleManager.prototype.disable_ = function() {
  * @private
  */
 lime.ScheduleManager.prototype.animationFrameHandler_ = function(time){
-    if(!time) time=goog.now(); // no time parameter in Chrome10beta
+    if (!time) { // no time parameter in Chrome10beta
+        time = goog.now();
+    }
     var delta = time - this.lastRunTime_;
+
+    if (delta < 0) {
+        delta = 1;
+    }
+
     this.dispatch_(delta);
     this.lastRunTime_ = time;
     this.animationFrameRequestID = lime.scheduleManager.requestAnimationFrameFunction(this.animationFrameHandlerBinded_);
@@ -220,10 +227,13 @@ lime.ScheduleManager.prototype.animationFrameHandler_ = function(time){
  * @private
  */
 lime.ScheduleManager.prototype.stepTimer_ = function() {
-    var t;
-    var curTime = goog.now();
-    var delta = curTime - this.lastRunTime_;
-    if (delta < 0) delta = 1;
+    var curTime = goog.now(),
+        delta = curTime - this.lastRunTime_;
+
+    if (delta < 0) {
+        delta = 1;
+    }
+
     this.dispatch_(delta);
     this.lastRunTime_ = curTime;
 };
