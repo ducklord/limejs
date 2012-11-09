@@ -1,33 +1,42 @@
 goog.provide('lime.SpriteSheet');
 
 goog.require('lime.fill.Frame');
-goog.require('lime.parser.ZWOPTEX');
+goog.require('lime.parser.JSON');
 
 /**
  * @constructor
  */
-lime.SpriteSheet = function(image, metadata, p){
-    this.image_ = new lime.fill.Image(image);
-    
-    if(!goog.isDef(p) && goog.DEBUG && goog.global['console'] && goog.global['console']['warn']){
-        goog.global['console']['warn']('DEPRECATED: SpriteSheet 3rd parser parameter is now required.');
-    }
-    
-    var parser = p || lime.parser.ZWOPTEX;
-    
-    this.metadata_ = parser(metadata.data());
+lime.SpriteSheet = function(){
+    /**
+     * @type {Object.<string, lime.fill.Frame>}
+     */
+    this.cacheMap_ = {};
 };
 
 /**
- * Return the frame fromt the sprite sheete that has the given name.
+ * @param {Image} image Spritemap Image.
+ * @param metadata Data describing how the sprites should be cut.
+ * @param {function(Object):Object=} p
+ */
+lime.SpriteSheet.prototype.prepareSprites = function(image, metadata, p) {
+    var parser = goog.isDef(p) ? p : lime.parser.JSON,
+        parsedData = parser(metadata.data());
+
+    // Prepare all sprite frames.
+    goog.object.forEach(parsedData, function(meta, name) {
+        this.cacheMap_[name] = new lime.fill.Frame(image, meta[0], meta[1], meta[2], meta[3])
+    }, this);
+}
+
+/**
+ * Return the frame from the sprite sheet that has the given name.
  * @param {string} name The name of the frame.
  */
 lime.SpriteSheet.prototype.getFrame = function(name){
-    var m = this.metadata_[name];
-    if(!m){
-        throw("Frame "+name+" not found in the spritesheet");
+    if(!goog.isDef(this.cacheMap_[name])) {
+        throw 'Sprite not prepared on this spritemap: ' + name;
     }
-    return new lime.fill.Frame(this.image_.image_, m[0], m[1], m[2], m[3]);
+    return this.cacheMap_[name];
 };
 
 /**
@@ -35,5 +44,5 @@ lime.SpriteSheet.prototype.getFrame = function(name){
  * @param {string} name The name to check if the sprite sheete contains.
  */
 lime.SpriteSheet.prototype.hasFrame = function(name){
-    return goog.isDef(this.metadata_[name]);
+    return goog.isDef(this.cacheMap_[name]);
 };
