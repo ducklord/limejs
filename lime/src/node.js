@@ -115,7 +115,7 @@ lime.Node.prototype.setRenderer = function(value) {
  */
 lime.Node.prototype.needsDomElement = function() {
     return !(this.parent_ &&
-        this.parent_.renderer.getType() == lime.Renderer.CANVAS);
+             this.parent_.renderer.getType() == lime.Renderer.CANVAS);
 };
 
 /**
@@ -136,10 +136,9 @@ lime.Node.prototype.getDeepestParentWithDom = function() {
     if (this.needsDomElement()) {
         this.updateDomElement();
         return this;
-    }
-    else {
+    } else {
         if (this.parent_)
-        return this.parent_.getDeepestParentWithDom();
+            return this.parent_.getDeepestParentWithDom();
     }
     return null;
 };
@@ -171,13 +170,17 @@ lime.Node.compareNode = function(n1, n2) {
 
     var i = 0;
     while (true) {
-        if (s1.length <= i) return 1;
-        if (s2.length <= i) return -1;
+        if (s1.length <= i) {
+            return 1;
+        }
+
+        if (s2.length <= i) {
+            return -1;
+        }
 
         if (s1[i] == s2[i]) {
             i++;
-        }
-        else {
+        } else {
             return s1[i] > s2[i] ? -1 : 1;
         }
     }
@@ -215,10 +218,11 @@ lime.Node.prototype.setDirty = function(value, opt_pass, opt_nextframe) {
     var old = this.dirty_;
     this.dirty_ |= value;
 
-    if (value == lime.Dirty.LAYOUT) {
+    if (value == lime.Dirty.LAYOUT && !(old & lime.Dirty.LAYOUT)) {
         for (var i = 0, child; child = this.children_[i]; i++) {
-            if (child instanceof lime.Node)
-            child.setDirty(lime.Dirty.LAYOUT);
+            if (child instanceof lime.Node) {
+                child.setDirty(lime.Dirty.LAYOUT);
+            }
         }
     }
     if (!goog.isDef(this.dirty_) || !value) {
@@ -337,8 +341,7 @@ lime.Node.prototype.getAnchorPoint = function() {
 lime.Node.prototype.setAnchorPoint = function(value, opt_y) {
     if (arguments.length == 2) {
         this.anchorPoint_ = new goog.math.Vec2(arguments[0], arguments[1]);
-    }
-    else {
+    } else {
         this.anchorPoint_ = value;
     }
     return this.setDirty(lime.Dirty.POSITION);
@@ -361,7 +364,9 @@ lime.Node.prototype.setRotation = function(value) {
 
     this.rotation_ = value;
 
-    if (this.transitionsActive_[lime.Transition.ROTATION]) return this;
+    if (this.transitionsActive_[lime.Transition.ROTATION]) {
+        return this;
+    }
 
     return this.setDirty(lime.Dirty.POSITION);
 };
@@ -407,8 +412,7 @@ lime.Node.prototype.setSize = function(value, opt_height) {
         scale;
     if (arguments.length == 2) {
         newval = new goog.math.Size(arguments[0], arguments[1]);
-    }
-    else {
+    } else {
         newval = value;
     }
     //todo:clear this mess
@@ -907,7 +911,9 @@ lime.Node.prototype.getParent = function() {
  * @return {lime.Node} obejct itself.
  */
 lime.Node.prototype.appendChild = function(child, opt_pos) {
-    
+    if (!goog.isDefAndNotNull(child)) {
+        throw 'Null of undefined child added';
+    }
     if (child instanceof lime.Node && child.getParent()) {
         child.getParent().removeChild(child);
     }
@@ -928,8 +934,10 @@ lime.Node.prototype.appendChild = function(child, opt_pos) {
         child.setRenderer(this.renderer.getType());
     }
     if (child instanceof lime.Node) {
-        child.calcRelativeQuality();
-        if (this.inTree_) child.wasAddedToTree();
+        if (this.inTree_) {
+            child.wasAddedToTree();
+        }
+        child.setDirty(lime.Dirty.LAYOUT);
     }
     return this.setDirty(lime.Dirty.LAYOUT);
 };
@@ -1051,8 +1059,10 @@ lime.Node.prototype.moveToFront = function() {
 /**
  * @inheritDoc
  */
-lime.Node.prototype.addEventListener = function(type, handler, 
+lime.Node.prototype.listen = function(type, handler,
         opt_capture, opt_handlerScope) {
+
+    goog.events.EventTarget.prototype.listen.apply(this, arguments);
 
     // Bypass all mouse events on touchscreen devices
     if (lime.userAgent.SUPPORTS_TOUCH &&
@@ -1075,8 +1085,11 @@ lime.Node.prototype.addEventListener = function(type, handler,
 /**
  * @inheritDoc
  */
-lime.Node.prototype.removeEventListener = function(
+lime.Node.prototype.unlisten = function(
     type, handler, opt_capture, opt_handlerScope) {
+
+
+    goog.events.EventTarget.prototype.unlisten.apply(this, arguments);
 
     // Bypass all mouse events on touchscreen devices
     if (lime.userAgent.SUPPORTS_TOUCH &&
