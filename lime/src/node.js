@@ -186,13 +186,6 @@ lime.Node.compareNode = function(n1, n2) {
 };
 
 /**
- * @type {boolean}
- * @private
- * @override
- */
-lime.Node.prototype.customEvent_ = false;
-
-/**
  * Return a bitmask of dirty values that need to be updated before next drawing
  * The bitmask parts are values of lime.Dirty enum
  * @return {number} Dirty propertiest bitmask.
