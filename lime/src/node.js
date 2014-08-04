@@ -1062,11 +1062,12 @@ lime.Node.prototype.moveToFront = function() {
 lime.Node.prototype.listen = function(type, handler,
         opt_capture, opt_handlerScope) {
 
-    goog.events.EventTarget.prototype.listen.apply(this, arguments);
+    var returnValue = goog.events.EventTarget.prototype.listen.apply(this, arguments);
 
     // Bypass all mouse events on touchscreen devices
-    if (lime.userAgent.SUPPORTS_TOUCH &&
-        type.substring(0, 5) == 'mouse') return;
+    if (lime.userAgent.SUPPORTS_TOUCH && type.substring(0, 5) == 'mouse') {
+        return returnValue;
+    }
 
     // First element defines if events are registered with DOM 1=yes/0=no
     // Second element defines how many listeners have been set
@@ -1080,6 +1081,7 @@ lime.Node.prototype.listen = function(type, handler,
     }
     this.eventHandlers_[type][1]++;
 
+    return returnValue;
 };
 
 /**
@@ -1089,11 +1091,12 @@ lime.Node.prototype.unlisten = function(
     type, handler, opt_capture, opt_handlerScope) {
 
 
-    goog.events.EventTarget.prototype.unlisten.apply(this, arguments);
+    var returnValue = goog.events.EventTarget.prototype.unlisten.apply(this, arguments);
 
     // Bypass all mouse events on touchscreen devices
-    if (lime.userAgent.SUPPORTS_TOUCH &&
-        type.substring(0, 5) == 'mouse') return;
+    if (lime.userAgent.SUPPORTS_TOUCH && type.substring(0, 5) == 'mouse') {
+        return returnValue;
+    }
 
     if (this.inTree_ && this.eventHandlers_[type][1] == 1) {
         this.eventHandlers_[type][0] = 0;
@@ -1102,6 +1105,7 @@ lime.Node.prototype.unlisten = function(
     this.eventHandlers_[type][1]--;
     if (!this.eventHandlers_[type][1]) delete this.eventHandlers_[type];
 
+    return returnValue;
 };
 
 /**
