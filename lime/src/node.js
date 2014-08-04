@@ -1,6 +1,6 @@
 goog.provide('lime.Node');
 
-
+goog.require('goog.dom.classlist');
 goog.require('goog.events.EventTarget');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
@@ -8,7 +8,6 @@ goog.require('goog.math.Size');
 goog.require('goog.math.Vec2');
 goog.require('lime');
 goog.require('lime.DirtyObject');
-
 goog.require('lime.Renderer.CANVAS');
 goog.require('lime.Renderer.DOM');
 
@@ -673,7 +672,7 @@ lime.Node.prototype.createDomElement = function() {
         this.domElement = this.rootElement =
             this.containerElement = goog.dom.createDom(newTagName);
         if (this.domClassName)
-            goog.dom.classes.add(this.domElement, this.domClassName);
+            goog.dom.classlist.add(this.domElement, this.domClassName);
         this.dirty_ |= ~0;
     };
 

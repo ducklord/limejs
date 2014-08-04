@@ -5,7 +5,7 @@ goog.require('lime.fill.Image');
 goog.require('goog.math.Rect');
 goog.require('goog.style');
 goog.require('goog.cssom');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.dom');
 goog.require('goog.math.Vec2');
 goog.require('goog.math.Size');
@@ -89,18 +89,18 @@ lime.fill.Frame.prototype.USE_CSS_CANVAS = goog.isFunction(document.getCSSCanvas
  * @inheritDoc
  */
 lime.fill.Frame.prototype.initForSprite = function(sprite){
-    
     var size = sprite.getSize();
-    if(size.width==0 && size.height==0){
-        sprite.setSize(this.csize_.width,this.csize_.height);
+
+    if (size.width == 0 && size.height == 0) {
+        sprite.setSize(this.csize_.width, this.csize_.height);
     }
     
     lime.fill.Image.prototype.initForSprite.call(this,sprite);
     
-    if(!this.isProcessed()){
-        goog.events.listen(this,'processed',function(){
+    if (!this.isProcessed()) {
+        goog.events.listen(this, 'processed', function(){
             sprite.setDirty(lime.Dirty.CONTENT);
-        },false,this);
+        }, false, this);
     }
     
     //switch to canvas if no support
@@ -129,23 +129,24 @@ lime.fill.Frame.prototype.makeFrameData_ = function(){
     this.writeToCanvas(this.ctx);
     
     if(!this.USE_CSS_CANVAS){
+        var contents = this.cvs.toDataURL("image/png"),
+            rule = '.'+this.data_.classname+'{background-image:url('+contents+') !important}';
 
-    var contents = this.cvs.toDataURL("image/png"),
-        rule = '.'+this.data_.classname+'{background-image:url('+contents+') !important}';
-    if(!styleSheet){
-        goog.style.installStyles(rule);
-       styleSheet = document.styleSheets[document.styleSheets.length-1];
-    }
-    else {
-        // why doesn't addCssRule work in IE9???
-       if(goog.userAgent.IE) styleSheet.cssText+=rule;
-       else goog.cssom.addCssRule(styleSheet,rule);
-    }
-    
-    // laoding into image to avoid flickery onf firefox firat load
-    this.data_.img = goog.dom.createDom('img');
-    this.data_.img.src = contents;
+        if(!styleSheet){
+            goog.style.installStyles(rule);
+            styleSheet = document.styleSheets[document.styleSheets.length-1];
+        } else {
+            // why doesn't addCssRule work in IE9???
+            if (goog.userAgent.IE) {
+                styleSheet.cssText += rule;
+            } else {
+                goog.cssom.addCssRule(styleSheet,rule);
+            }
+        }
 
+        // laoding into image to avoid flickery onf firefox firat load
+        this.data_.img = goog.dom.createDom('img');
+        this.data_.img.src = contents;
     }
     
     this.data_.processed = true;
@@ -210,7 +211,7 @@ lime.fill.Frame.prototype.writeToCanvas = function(ctx){
 
 /** @inheritDoc */
 lime.fill.Frame.prototype.clearDOMStyle = function(domEl, shape) {
-    goog.dom.classes.remove(domEl, shape.cvs_background_class_);
+    goog.dom.classlist.remove(domEl, shape.cvs_background_class_);
     delete shape.cvs_background_class_;
 };
 
@@ -220,10 +221,10 @@ lime.fill.Frame.prototype.setDOMStyle = function(domEl,shape) {
         domEl.style['background'] = '-webkit-canvas('+this.data_.classname+')';    
     }    
     else if(this.data_.classname!=shape.cvs_background_class_){
-        goog.dom.classes.add(domEl,this.data_.classname);
+        goog.dom.classlist.add(domEl, this.data_.classname);
         domEl.style['background'] = '';
         if(shape.cvs_background_class_) {
-            goog.dom.classes.remove(domEl,shape.cvs_background_class_);
+            goog.dom.classlist.remove(domEl, shape.cvs_background_class_);
         }
         shape.cvs_background_class_ = this.data_.classname;
     }

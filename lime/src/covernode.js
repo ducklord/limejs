@@ -3,7 +3,7 @@ goog.provide('lime.CoverNode');
 
 
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.math.Box');
 goog.require('goog.style');
 goog.require('lime.Node');
@@ -29,7 +29,7 @@ lime.CoverNode = function() {
     this.context = this.baseElement.getContext('2d');
 
     // add extra className
-    goog.dom.classes.add(this.baseElement, goog.getCssName('lime-cover'));
+    goog.dom.classlist.add(this.baseElement, goog.getCssName('lime-cover'));
 
 };
 goog.inherits(lime.CoverNode, lime.Node);
